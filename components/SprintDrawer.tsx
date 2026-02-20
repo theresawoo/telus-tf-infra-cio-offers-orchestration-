@@ -3,6 +3,9 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Sprint, Feature, Priority, Status } from '../types';
 import { PRIORITY_COLORS, STATUS_COLORS } from '../constants';
 import { doSprintsOverlap, getFeatureAllocatedPoints } from '../utils';
+import { Label } from './ui/Label';
+import { Input } from './ui/Input';
+import { Select } from './ui/Select';
 
 interface SprintDrawerProps {
   sprint: Sprint;
@@ -240,7 +243,7 @@ const SprintDrawer: React.FC<SprintDrawerProps> = ({
 
           <div className="space-y-4">
             <div className="flex flex-col">
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Sprint Name</label>
+              <Label>Sprint Name</Label>
               <input 
                 className={`text-2xl font-black bg-transparent border-none focus:ring-0 p-0 rounded transition-all text-slate-900 hover:bg-slate-50 outline-none`}
                 value={draftSprint.name}
@@ -250,12 +253,11 @@ const SprintDrawer: React.FC<SprintDrawerProps> = ({
 
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col">
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Start Date</label>
+                <Label>Start Date</Label>
                 <div className="relative group cursor-pointer">
-                  <input 
-                    type="text" 
+                  <Input 
                     placeholder="YYYY-MM-DD"
-                    className="w-full text-sm font-bold bg-slate-50 border border-slate-100 rounded-lg pl-3 pr-10 py-2 outline-none focus:ring-2 focus:ring-indigo-500 transition-all hover:bg-slate-100 cursor-pointer" 
+                    className="pr-10" 
                     value={startStr} 
                     onChange={(e) => handleDateStringUpdate('startDate', e.target.value)} 
                     onClick={() => triggerPicker(hiddenStartRef)}
@@ -272,12 +274,11 @@ const SprintDrawer: React.FC<SprintDrawerProps> = ({
                 </div>
               </div>
               <div className="flex flex-col">
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">End Date</label>
+                <Label>End Date</Label>
                 <div className="relative group cursor-pointer">
-                  <input 
-                    type="text" 
+                  <Input 
                     placeholder="YYYY-MM-DD"
-                    className="w-full text-sm font-bold bg-slate-50 border border-slate-100 rounded-lg pl-3 pr-10 py-2 outline-none focus:ring-2 focus:ring-indigo-500 transition-all hover:bg-slate-100 cursor-pointer" 
+                    className="pr-10" 
                     value={endStr} 
                     onChange={(e) => handleDateStringUpdate('endDate', e.target.value)} 
                     onClick={() => triggerPicker(hiddenEndRef)}
@@ -297,12 +298,11 @@ const SprintDrawer: React.FC<SprintDrawerProps> = ({
 
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col">
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Deployment Date</label>
+                <Label>Deployment Date</Label>
                 <div className="relative group cursor-pointer">
-                  <input 
-                    type="text" 
+                  <Input 
                     placeholder="YYYY-MM-DD"
-                    className={`w-full text-sm font-bold border rounded-lg pl-3 pr-10 py-2 outline-none focus:ring-2 focus:ring-indigo-500 transition-all bg-indigo-50 border-indigo-100 text-indigo-700 cursor-pointer hover:bg-indigo-100`} 
+                    className="bg-indigo-50 border-indigo-100 text-indigo-700 hover:bg-indigo-100 pr-10" 
                     value={deployStr} 
                     onChange={(e) => handleDateStringUpdate('targetDeploymentDate', e.target.value)} 
                     onClick={() => triggerPicker(hiddenDeployRef)}
@@ -319,8 +319,8 @@ const SprintDrawer: React.FC<SprintDrawerProps> = ({
                 </div>
               </div>
               <div className="flex flex-col">
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Sprint Capacity</label>
-                <input type="number" className="text-sm font-bold bg-slate-50 border border-slate-100 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500 transition-all" value={draftSprint.capacity} onChange={(e) => handleUpdateSprintDraft({ capacity: Number(e.target.value) })} />
+                <Label>Sprint Capacity</Label>
+                <Input type="number" value={draftSprint.capacity} onChange={(e) => handleUpdateSprintDraft({ capacity: Number(e.target.value) })} />
               </div>
             </div>
 
@@ -329,7 +329,7 @@ const SprintDrawer: React.FC<SprintDrawerProps> = ({
 
           <div className={`rounded-2xl p-6 border transition-all bg-slate-50 border-slate-100`}>
              <div className="flex justify-between items-center mb-4">
-                <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Sprint Utilization</h4>
+                <Label>Sprint Utilization</Label>
                 <span className={`text-xs font-black ${utilization > 100 ? 'text-red-500' : 'text-indigo-600'}`}>
                   {usedPoints} / {draftSprint.capacity} PTS ({Math.round(utilization)}%)
                 </span>
@@ -342,7 +342,7 @@ const SprintDrawer: React.FC<SprintDrawerProps> = ({
           </div>
 
           <div className="space-y-4">
-            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Assigned Deliverables</h4>
+            <Label>Assigned Deliverables</Label>
             <div className="space-y-3">
               {sprintFeatures.length === 0 ? (
                 <p className="text-sm text-slate-400 italic">No features assigned.</p>
@@ -376,7 +376,7 @@ const SprintDrawer: React.FC<SprintDrawerProps> = ({
                       
                       <div className="flex items-center gap-4">
                         <div className="flex-1">
-                          <label className="text-[9px] font-black text-slate-400 uppercase mb-1 block">Allocated Points</label>
+                          <Label>Allocated Points</Label>
                           <div className="flex items-center gap-2">
                             <input 
                               type="range" 
@@ -387,14 +387,14 @@ const SprintDrawer: React.FC<SprintDrawerProps> = ({
                               onChange={(e) => updateAllocationLocally(f.id, Number(e.target.value))}
                               className={`flex-1 h-1.5 rounded-lg appearance-none transition-all ${isClosed ? 'bg-slate-200 cursor-not-allowed' : 'bg-slate-100 cursor-pointer accent-indigo-600'}`}
                             />
-                            <input 
+                            <Input 
                               type="number"
                               disabled={isClosed}
                               min="0" 
                               max={availableForThisSprint} 
                               value={currentAlloc}
                               onChange={(e) => updateAllocationLocally(f.id, Number(e.target.value))}
-                              className={`w-16 text-xs font-bold border rounded px-2 py-1 text-center transition-all ${isClosed ? 'bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed' : 'bg-slate-50 border-slate-100 text-slate-900 focus:ring-2 focus:ring-indigo-500 outline-none'}`}
+                              className="w-16 px-2 py-1 text-center"
                             />
                           </div>
                         </div>
@@ -406,9 +406,8 @@ const SprintDrawer: React.FC<SprintDrawerProps> = ({
             </div>
 
             <div className="pt-2">
-              <select 
+              <Select 
                 disabled={isClosed}
-                className={`w-full text-xs font-bold bg-white border border-slate-200 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500 transition-all ${isClosed ? 'opacity-50 cursor-not-allowed text-slate-400 bg-slate-50' : ''}`}
                 value=""
                 onChange={(e) => {
                   if (e.target.value) toggleFeatureInSprintLocally(e.target.value, 'add');
@@ -418,7 +417,7 @@ const SprintDrawer: React.FC<SprintDrawerProps> = ({
                 {!isClosed && availableFeatures.map(f => (
                   <option key={f.id} value={f.id}>{f.name} ({f.points} pts total)</option>
                 ))}
-              </select>
+              </Select>
             </div>
           </div>
         </div>

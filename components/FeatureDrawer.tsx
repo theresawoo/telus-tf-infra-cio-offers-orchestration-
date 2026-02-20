@@ -3,6 +3,9 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Feature, Priority, Status, System, Sprint } from '../types';
 import { PRIORITY_COLORS, STATUS_COLORS } from '../constants';
 import { updateFeatureDatesFromSprints, getFeatureAllocatedPoints } from '../utils';
+import { Label } from './ui/Label';
+import { Input } from './ui/Input';
+import { Select } from './ui/Select';
 
 interface FeatureDrawerProps {
   feature: Feature;
@@ -145,44 +148,42 @@ const FeatureDrawer: React.FC<FeatureDrawerProps> = ({ feature, allFeatures, spr
         <div className="flex-1 overflow-y-auto p-8 space-y-8">
           <div className="space-y-4">
             <div className="flex flex-col">
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Feature Name</label>
-              <input className="text-2xl font-black text-slate-900 bg-transparent border-none focus:ring-0 p-0 rounded" value={draft.name} onChange={(e) => handleUpdate({ name: e.target.value })} />
+              <Label>Feature Name</Label>
+              <input className="text-2xl font-black text-slate-900 bg-transparent border-none focus:ring-0 p-0 rounded outline-none" value={draft.name} onChange={(e) => handleUpdate({ name: e.target.value })} />
             </div>
             <div className="flex flex-col">
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Description</label>
-              <textarea className="text-slate-600 bg-slate-50 border border-transparent rounded-xl p-4 min-h-[120px] outline-none" value={draft.description} onChange={(e) => handleUpdate({ description: e.target.value })} />
+              <Label>Description</Label>
+              <textarea className="text-slate-600 bg-slate-50 border border-transparent rounded-xl p-4 min-h-[120px] outline-none focus:ring-2 focus:ring-indigo-500 transition-all" value={draft.description} onChange={(e) => handleUpdate({ description: e.target.value })} />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-1">
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Status</label>
-              <select value={draft.status} onChange={(e) => handleUpdate({ status: e.target.value as Status })} className={`w-full text-sm font-bold border-2 rounded-lg px-3 py-2 outline-none ${STATUS_COLORS[draft.status]} border-transparent transition-all`}>
+              <Label>Status</Label>
+              <Select value={draft.status} onChange={(e) => handleUpdate({ status: e.target.value as Status })} className={`${STATUS_COLORS[draft.status]} border-transparent`}>
                 {Object.values(Status).map(s => <option key={s} value={s}>{s}</option>)}
-              </select>
+              </Select>
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Priority</label>
-              <select value={draft.priority} onChange={(e) => handleUpdate({ priority: e.target.value as Priority })} className={`w-full text-sm font-bold border-2 rounded-lg px-3 py-2 outline-none ${PRIORITY_COLORS[draft.priority]} border-transparent transition-all`}>
+              <Label>Priority</Label>
+              <Select value={draft.priority} onChange={(e) => handleUpdate({ priority: e.target.value as Priority })} className={`${PRIORITY_COLORS[draft.priority]} border-transparent`}>
                 {Object.values(Priority).map(p => <option key={p} value={p}>{p}</option>)}
-              </select>
+              </Select>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-6">
             <div className="flex flex-col">
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Owner</label>
-              <input 
-                className="text-sm font-bold text-slate-700 bg-slate-50 border border-slate-100 rounded-lg px-3 py-2.5 outline-none focus:ring-2 focus:ring-indigo-500 transition-all" 
+              <Label>Owner</Label>
+              <Input 
                 value={draft.owner} 
                 onChange={(e) => handleUpdate({ owner: e.target.value })} 
                 placeholder="Assign an owner..."
               />
             </div>
             <div className="flex flex-col">
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Jira Number</label>
-              <input 
-                className="text-sm font-bold text-slate-700 bg-slate-50 border border-slate-100 rounded-lg px-3 py-2.5 outline-none focus:ring-2 focus:ring-indigo-500 transition-all" 
+              <Label>Jira Number</Label>
+              <Input 
                 value={draft.jiraNumber} 
                 onChange={(e) => handleUpdate({ jiraNumber: e.target.value })} 
                 placeholder="e.g. PROJ-123"
@@ -190,17 +191,15 @@ const FeatureDrawer: React.FC<FeatureDrawerProps> = ({ feature, allFeatures, spr
             </div>
           </div>
 
-          {/* Planned Timeline Section */}
           <div className="space-y-4">
-            <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Planned Timeline</h4>
+            <Label>Planned Timeline</Label>
             <div className="grid grid-cols-2 gap-6">
               <div className="flex flex-col">
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Start Date</label>
+                <Label>Start Date</Label>
                 <div className="relative group cursor-pointer">
-                  <input 
-                    type="text" 
+                  <Input 
                     placeholder="YYYY-MM-DD"
-                    className="w-full text-sm font-bold bg-slate-50 border border-slate-100 rounded-lg pl-3 pr-12 py-2.5 outline-none focus:ring-2 focus:ring-indigo-500 transition-all hover:bg-slate-100" 
+                    className="pr-12" 
                     value={startStr} 
                     onChange={(e) => handleDateStringUpdate('startDate', e.target.value)} 
                     onClick={() => triggerPicker(hiddenStartRef)}
@@ -217,12 +216,11 @@ const FeatureDrawer: React.FC<FeatureDrawerProps> = ({ feature, allFeatures, spr
                 </div>
               </div>
               <div className="flex flex-col">
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">End Date</label>
+                <Label>End Date</Label>
                 <div className="relative group cursor-pointer">
-                  <input 
-                    type="text" 
+                  <Input 
                     placeholder="YYYY-MM-DD"
-                    className="w-full text-sm font-bold bg-slate-50 border border-slate-100 rounded-lg pl-3 pr-12 py-2.5 outline-none focus:ring-2 focus:ring-indigo-500 transition-all hover:bg-slate-100" 
+                    className="pr-12" 
                     value={endStr} 
                     onChange={(e) => handleDateStringUpdate('endDate', e.target.value)} 
                     onClick={() => triggerPicker(hiddenEndRef)}
@@ -242,7 +240,7 @@ const FeatureDrawer: React.FC<FeatureDrawerProps> = ({ feature, allFeatures, spr
           </div>
 
           <div className="bg-slate-50 rounded-2xl p-6 space-y-4 border border-slate-100">
-            <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Sprint Distribution</h4>
+            <Label>Sprint Distribution</Label>
             <div className="space-y-3">
               {draft.sprintAllocations.map(sa => {
                 const sprint = sprints.find(s => s.id === sa.sprintId);
@@ -270,9 +268,9 @@ const FeatureDrawer: React.FC<FeatureDrawerProps> = ({ feature, allFeatures, spr
                     </div>
                     <div className="flex items-center gap-2">
                        <span className="text-[10px] text-slate-400 font-bold">Allocation:</span>
-                       <input 
+                       <Input 
                          type="number" 
-                         className={`flex-1 text-xs font-bold border rounded px-2 py-1 transition-all bg-white border-slate-100 text-slate-900 focus:ring-2 focus:ring-indigo-500 outline-none`}
+                         className="flex-1 px-2 py-1"
                          value={sa.points}
                          onChange={(e) => updateAllocation(sa.sprintId, Number(e.target.value))}
                        />
@@ -283,8 +281,7 @@ const FeatureDrawer: React.FC<FeatureDrawerProps> = ({ feature, allFeatures, spr
               })}
 
               <div className="pt-2">
-                <select 
-                  className="w-full text-xs font-bold bg-white border border-slate-200 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500 transition-all" 
+                <Select 
                   value="" 
                   onChange={(e) => { if (e.target.value) handleSprintAssociation(e.target.value, 'add'); e.target.value = ""; }}
                 >
@@ -294,31 +291,31 @@ const FeatureDrawer: React.FC<FeatureDrawerProps> = ({ feature, allFeatures, spr
                     .map(s => (
                       <option key={s.id} value={s.id}>{s.name}</option>
                     ))}
-                </select>
+                </Select>
               </div>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-6">
             <div className="flex flex-col">
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Total Effort</label>
+              <Label>Total Effort</Label>
               <div className="flex items-center gap-2 bg-slate-50 rounded-lg px-3 py-2 border border-slate-100">
-                <input type="number" className="w-full bg-transparent border-none focus:ring-0 font-bold text-slate-700" value={draft.points} onChange={(e) => handleUpdate({ points: Number(e.target.value) })} />
+                <input type="number" className="w-full bg-transparent border-none focus:ring-0 font-bold text-slate-700 outline-none" value={draft.points} onChange={(e) => handleUpdate({ points: Number(e.target.value) })} />
                 <span className="text-[10px] font-black text-slate-300">PTS</span>
               </div>
             </div>
             <div className="flex flex-col">
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Est. Cost</label>
+              <Label>Est. Cost</Label>
               <div className="flex items-center gap-2 bg-slate-50 rounded-lg px-3 py-2 border border-slate-100">
                 <span className="text-slate-400 font-bold">$</span>
-                <input type="number" className="w-full bg-transparent border-none focus:ring-0 font-bold text-slate-700" value={draft.estimatedCost} onChange={(e) => handleUpdate({ estimatedCost: Number(e.target.value) })} />
+                <input type="number" className="w-full bg-transparent border-none focus:ring-0 font-bold text-slate-700 outline-none" value={draft.estimatedCost} onChange={(e) => handleUpdate({ estimatedCost: Number(e.target.value) })} />
               </div>
             </div>
           </div>
 
           {/* Programs Management */}
           <div className="space-y-4">
-            <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Associated Programs</h4>
+            <Label>Associated Programs</Label>
             <div className="flex flex-wrap gap-2">
               {draft.programs.map((p, idx) => (
                 <div key={idx} className="flex items-center gap-2 bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-lg border border-indigo-100 text-sm font-bold group">

@@ -5,6 +5,10 @@ import { suggestFeatures } from '../geminiService';
 import { filterFeatures, getFeatureStats } from '../utils';
 import FeatureDrawer from './FeatureDrawer';
 import SprintDrawer from './SprintDrawer';
+import { StatTile } from './ui/StatTile';
+import { Label } from './ui/Label';
+import { Input } from './ui/Input';
+import { Select } from './ui/Select';
 
 interface FeatureViewProps {
   features: Feature[];
@@ -157,76 +161,69 @@ const FeatureView: React.FC<FeatureViewProps> = ({ features, sprints, onUpdate, 
 
       {/* Analytics Summary */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm">
-          <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Total Effort</div>
-          <div className="flex items-baseline gap-1">
-            <span className="text-2xl font-black text-slate-900">{stats.totalPoints}</span>
-            <span className="text-xs font-bold text-slate-400">PTS</span>
-          </div>
-          <div className="text-[10px] text-slate-500 mt-1">Avg {stats.avgPoints} points/feature</div>
-        </div>
-        <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm">
-          <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Critical Risk</div>
-          <div className="flex items-baseline gap-1">
-            <span className="text-2xl font-black text-red-600">{stats.criticalCount}</span>
-            <span className="text-xs font-bold text-slate-400">TASKS</span>
-          </div>
-          <div className="text-[10px] text-slate-500 mt-1">{stats.highCount} High Priority items</div>
-        </div>
-        <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm">
-          <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">In Progress</div>
-          <div className="flex items-baseline gap-1">
-            <span className="text-2xl font-black text-indigo-600">{stats.inProgressCount}</span>
-          </div>
-          <div className="text-[10px] text-slate-500 mt-1">Active delivery work</div>
-        </div>
-        <div className="bg-indigo-600 border border-indigo-500 p-5 rounded-2xl shadow-lg shadow-indigo-100">
-          <div className="text-[10px] font-bold text-indigo-200 uppercase tracking-widest mb-1">Total Value</div>
-          <div className="flex items-baseline gap-1">
-            <span className="text-2xl font-black text-white">${features.reduce((a,f)=>a+f.estimatedCost,0).toLocaleString()}</span>
-          </div>
-          <div className="text-[10px] text-indigo-200 mt-1">Budgeted program cost</div>
-        </div>
+        <StatTile 
+          label="Total Effort" 
+          value={stats.totalPoints} 
+          subtext={`Avg ${stats.avgPoints} points/feature`}
+        />
+        <StatTile 
+          label="Critical Risk" 
+          value={stats.criticalCount} 
+          valueClassName="text-red-600"
+          subtext={`${stats.highCount} High Priority items`}
+        />
+        <StatTile 
+          label="In Progress" 
+          value={stats.inProgressCount} 
+          valueClassName="text-indigo-600"
+          subtext="Active delivery work"
+        />
+        <StatTile 
+          label="Total Value" 
+          value={`$${features.reduce((a,f)=>a+f.estimatedCost,0).toLocaleString()}`}
+          accent
+          subtext="Budgeted program cost"
+        />
       </div>
 
       {/* Filter Bar */}
       <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-wrap items-center gap-6">
         <div className="flex items-center gap-3">
-          <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Status</label>
-          <select 
+          <Label className="mb-0">Status</Label>
+          <Select 
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="text-sm bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-indigo-500 outline-none"
+            className="py-1.5"
           >
             <option value="All">All Statuses</option>
             {Object.values(Status).map(s => <option key={s} value={s}>{s}</option>)}
-          </select>
+          </Select>
         </div>
 
         <div className="flex items-center gap-3">
-          <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">System</label>
-          <select 
+          <Label className="mb-0">System</Label>
+          <Select 
             value={systemFilter}
             onChange={(e) => setSystemFilter(e.target.value)}
-            className="text-sm bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-indigo-500 outline-none"
+            className="py-1.5"
           >
             <option value="All">All Systems</option>
             {Object.values(System).map(s => <option key={s} value={s}>{s}</option>)}
-          </select>
+          </Select>
         </div>
 
         <div className="flex items-center gap-3 flex-1 min-w-[200px]">
-          <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Requestor</label>
+          <Label className="mb-0">Requestor</Label>
           <div className="relative flex-1">
             <svg className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-            <input 
+            <Input 
               type="text"
               placeholder="Filter by name..."
               value={requestorFilter}
               onChange={(e) => setRequestorFilter(e.target.value)}
-              className="w-full text-sm bg-slate-50 border border-slate-200 rounded-lg pl-10 pr-3 py-1.5 focus:ring-2 focus:ring-indigo-500 outline-none"
+              className="pl-10 py-1.5"
             />
           </div>
         </div>

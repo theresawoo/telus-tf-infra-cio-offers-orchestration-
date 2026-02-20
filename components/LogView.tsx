@@ -2,6 +2,9 @@
 import React, { useState, useMemo } from 'react';
 import { LogEntry } from '../types';
 import { filterLogs } from '../utils';
+import { Label } from './ui/Label';
+import { Input } from './ui/Input';
+import { Select } from './ui/Select';
 
 interface LogViewProps {
   logs: LogEntry[];
@@ -26,30 +29,30 @@ const LogView: React.FC<LogViewProps> = ({ logs }) => {
 
       <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-wrap items-center gap-6">
         <div className="flex items-center gap-3">
-          <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Entity Type</label>
-          <select 
+          <Label className="mb-0">Entity Type</Label>
+          <Select 
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
-            className="text-sm bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-indigo-500 outline-none"
+            className="py-1.5"
           >
             <option value="All">All Types</option>
             <option value="Feature">Feature</option>
             <option value="Sprint">Sprint</option>
-          </select>
+          </Select>
         </div>
 
         <div className="flex items-center gap-3 flex-1 min-w-[300px]">
-          <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Search</label>
+          <Label className="mb-0">Search</Label>
           <div className="relative flex-1">
             <svg className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-            <input 
+            <Input 
               type="text"
               placeholder="Search logs by name, action, or description..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full text-sm bg-slate-50 border border-slate-200 rounded-lg pl-10 pr-3 py-1.5 focus:ring-2 focus:ring-indigo-500 outline-none"
+              className="pl-10 py-1.5"
             />
           </div>
         </div>

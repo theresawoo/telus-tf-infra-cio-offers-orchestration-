@@ -3,6 +3,7 @@ import React, { useMemo } from 'react';
 import { Feature, RunRateData, System } from '../types';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area, ComposedChart, Line, Legend } from 'recharts';
 import { getMonthlyFinancials, getProgramFinancials, getFinancialComparison } from '../utils';
+import { StatTile } from './ui/StatTile';
 
 interface FinancialViewProps {
   features: Feature[];
@@ -34,26 +35,29 @@ const FinancialView: React.FC<FinancialViewProps> = ({ features, runRates, activ
 
       {/* Summary Tiles */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm">
-          <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Total Budget</div>
-          <div className="text-2xl font-black text-slate-900">${totalBudget.toLocaleString()}</div>
-          <div className="text-[10px] text-slate-500 mt-1">Portfolio value</div>
-        </div>
-        <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm">
-          <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Total Run Rate</div>
-          <div className="text-2xl font-black text-indigo-600">${totalRunRate.toLocaleString()}</div>
-          <div className="text-[10px] text-slate-500 mt-1">Operational burn</div>
-        </div>
-        <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm">
-          <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Top Program: {topProgram?.name || 'N/A'}</div>
-          <div className="text-2xl font-black text-emerald-600">${topProgram?.cost.toLocaleString() || '0'}</div>
-          <div className="text-[10px] text-slate-500 mt-1">Primary investment</div>
-        </div>
-        <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm">
-          <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">2nd Program: {secondProgram?.name || 'N/A'}</div>
-          <div className="text-2xl font-black text-emerald-600">${secondProgram?.cost.toLocaleString() || '0'}</div>
-          <div className="text-[10px] text-slate-500 mt-1">Secondary investment</div>
-        </div>
+        <StatTile 
+          label="Total Budget" 
+          value={`$${totalBudget.toLocaleString()}`} 
+          subtext="Portfolio value"
+        />
+        <StatTile 
+          label="Total Run Rate" 
+          value={`$${totalRunRate.toLocaleString()}`} 
+          valueClassName="text-indigo-600"
+          subtext="Operational burn"
+        />
+        <StatTile 
+          label={`Top Program: ${topProgram?.name || 'N/A'}`} 
+          value={`$${topProgram?.cost.toLocaleString() || '0'}`} 
+          valueClassName="text-emerald-600"
+          subtext="Primary investment"
+        />
+        <StatTile 
+          label={`2nd Program: ${secondProgram?.name || 'N/A'}`} 
+          value={`$${secondProgram?.cost.toLocaleString() || '0'}`} 
+          valueClassName="text-emerald-600"
+          subtext="Secondary investment"
+        />
       </div>
 
       {/* Comparison Analysis Section */}

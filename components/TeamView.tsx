@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { RunRateData, System } from '../types';
+import { Input } from './ui/Input';
 
 interface RunRateViewProps {
   runRates: RunRateData;
@@ -88,12 +89,12 @@ const TeamView: React.FC<RunRateViewProps> = ({ runRates, onUpdate }) => {
                   <td className="px-6 py-4 font-black text-slate-900 sticky left-0 bg-white z-10 border-r border-slate-100">{platform}</td>
                   {MONTHS.map((_, monthIdx) => (
                     <td key={monthIdx} className="px-2 py-4">
-                      <div className="flex items-center gap-1 px-2 border border-slate-100 rounded-lg hover:border-indigo-300 focus-within:ring-2 focus-within:ring-indigo-100 focus-within:border-indigo-400 transition-all bg-slate-50/30">
-                        <span className="text-[10px] font-bold text-slate-300">$</span>
-                        <input 
+                      <div className="relative group">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-slate-300">$</span>
+                        <Input 
                           type="number"
                           step="1000"
-                          className="w-full bg-transparent border-none focus:ring-0 text-xs font-bold text-slate-700 p-1.5"
+                          className="pl-6 pr-2 py-1.5 text-xs"
                           value={runRates[selectedYear]?.[monthIdx]?.[platform] || 0}
                           onChange={(e) => onUpdate(selectedYear, monthIdx, platform, Number(e.target.value))}
                         />
