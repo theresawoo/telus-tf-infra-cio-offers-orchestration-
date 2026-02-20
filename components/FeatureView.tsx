@@ -335,6 +335,7 @@ const FeatureView: React.FC<FeatureViewProps> = ({ features, sprints, onUpdate, 
       {selectedFeature && (
         <FeatureDrawer 
           feature={selectedFeature}
+          allFeatures={features}
           sprints={sprints}
           onUpdate={onUpdate}
           onOpenSprint={(id) => { setSelectedFeatureId(null); setSelectedSprintId(id); }}

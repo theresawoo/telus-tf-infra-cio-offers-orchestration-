@@ -6,14 +6,24 @@ import { updateFeatureDatesFromSprints, getFeatureAllocatedPoints } from '../uti
 
 interface FeatureDrawerProps {
   feature: Feature;
+  allFeatures: Feature[];
   sprints: Sprint[];
   onUpdate: (f: Feature) => void;
   onOpenSprint?: (sprintId: string) => void;
   onClose: () => void;
 }
 
-const FeatureDrawer: React.FC<FeatureDrawerProps> = ({ feature, sprints, onUpdate, onOpenSprint, onClose }) => {
+const FeatureDrawer: React.FC<FeatureDrawerProps> = ({ feature, allFeatures, sprints, onUpdate, onOpenSprint, onClose }) => {
   const [draft, setDraft] = useState<Feature>(feature);
+  
+  // Unique existing programs from all features
+  const existingPrograms = useMemo(() => {
+    const progs = new Set<string>();
+    allFeatures.forEach(f => {
+      f.programs?.forEach(p => progs.add(p));
+    });
+    return Array.from(progs).sort();
+  }, [allFeatures]);
   
   // Local string states to allow free-form typing without immediate object validation
   const [startStr, setStartStr] = useState(feature.startDate);
@@ -313,6 +323,7 @@ const FeatureDrawer: React.FC<FeatureDrawerProps> = ({ feature, sprints, onUpdat
               {draft.programs.map((p, idx) => (
                 <div key={idx} className="flex items-center gap-2 bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-lg border border-indigo-100 text-sm font-bold group">
                   <input 
+                    list="existing-programs"
                     className="bg-transparent border-none focus:ring-0 p-0 w-auto min-w-[80px] outline-none" 
                     value={p} 
                     onChange={(e) => {
@@ -335,7 +346,7 @@ const FeatureDrawer: React.FC<FeatureDrawerProps> = ({ feature, sprints, onUpdat
                 </div>
               ))}
               <button 
-                onClick={() => handleUpdate({ programs: [...draft.programs, 'New Program'] })}
+                onClick={() => handleUpdate({ programs: [...draft.programs, ''] })}
                 className="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-dashed border-slate-300 text-slate-400 hover:border-indigo-400 hover:text-indigo-600 transition-all text-sm font-bold"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -344,6 +355,11 @@ const FeatureDrawer: React.FC<FeatureDrawerProps> = ({ feature, sprints, onUpdat
                 Add Program
               </button>
             </div>
+            <datalist id="existing-programs">
+              {existingPrograms.map(prog => (
+                <option key={prog} value={prog} />
+              ))}
+            </datalist>
           </div>
         </div>
 
