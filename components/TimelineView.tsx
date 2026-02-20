@@ -9,6 +9,7 @@ import SprintDrawer from './SprintDrawer';
 interface TimelineViewProps {
   features: Feature[];
   sprints: Sprint[];
+  activeSystem: System | 'global';
   onUpdate: (f: Feature) => void;
   onAddSprint: (s: Sprint) => void;
   onUpdateSprint: (s: Sprint) => void;
@@ -20,6 +21,7 @@ type ViewRangeType = 'all' | 'month' | 'quarter' | 'year' | 'custom';
 const TimelineView: React.FC<TimelineViewProps> = ({ 
   features, 
   sprints, 
+  activeSystem,
   onUpdate,
   onAddSprint,
   onUpdateSprint,
@@ -135,7 +137,8 @@ const TimelineView: React.FC<TimelineViewProps> = ({
       endDate: twoWeeks,
       targetDeploymentDate: nextDay,
       capacity: 40,
-      isClosed: false
+      isClosed: false,
+      system: activeSystem === 'global' ? System.TOM : activeSystem
     };
     onAddSprint(newSprint);
     setSelectedSprintId(newSprint.id);

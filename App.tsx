@@ -123,6 +123,11 @@ const App: React.FC = () => {
     return features.filter(f => f.system === activeSystem);
   }, [features, activeSystem]);
 
+  const filteredSprints = useMemo(() => {
+    if (activeSystem === 'global') return sprints;
+    return sprints.filter(s => s.system === activeSystem);
+  }, [sprints, activeSystem]);
+
   return (
     <div className="min-h-screen flex flex-col">
       <header className="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
@@ -189,7 +194,7 @@ const App: React.FC = () => {
         {activeTab === 'features' && (
           <FeatureView 
             features={filteredFeatures} 
-            sprints={sprints} 
+            sprints={filteredSprints} 
             onUpdate={handleUpdateFeature} 
             onDelete={handleDeleteFeature} 
             onAdd={handleAddFeature} 
@@ -201,7 +206,8 @@ const App: React.FC = () => {
         {activeTab === 'timeline' && (
           <TimelineView 
             features={filteredFeatures} 
-            sprints={sprints} 
+            sprints={filteredSprints} 
+            activeSystem={activeSystem}
             onUpdate={handleUpdateFeature} 
             onAddSprint={handleAddSprint} 
             onUpdateSprint={handleUpdateSprint} 

@@ -78,7 +78,8 @@ export const INITIAL_SPRINTS: Sprint[] = [
     startDate: '2026-03-01',
     endDate: '2026-03-14',
     targetDeploymentDate: '2026-03-15',
-    capacity: 40
+    capacity: 40,
+    system: System.TOM
   },
   {
     id: 's2',
@@ -86,7 +87,8 @@ export const INITIAL_SPRINTS: Sprint[] = [
     startDate: '2026-03-15',
     endDate: '2026-03-28',
     targetDeploymentDate: '2026-03-29',
-    capacity: 45
+    capacity: 45,
+    system: System.TOM
   }
 ];
 

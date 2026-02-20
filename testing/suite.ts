@@ -128,8 +128,8 @@ export const runSuite = async () => {
 
   runner.add('Sprint Sync: Should update feature dates to align with associated sprints', () => {
     const sprints: Sprint[] = [
-      { id: 's1', name: 'S1', startDate: '2026-03-01', endDate: '2026-03-14', targetDeploymentDate: '2026-03-15', capacity: 40 },
-      { id: 's2', name: 'S2', startDate: '2026-04-01', endDate: '2026-04-14', targetDeploymentDate: '2026-04-15', capacity: 40 }
+      { id: 's1', name: 'S1', startDate: '2026-03-01', endDate: '2026-03-14', targetDeploymentDate: '2026-03-15', capacity: 40, system: System.TOM },
+      { id: 's2', name: 'S2', startDate: '2026-04-01', endDate: '2026-04-14', targetDeploymentDate: '2026-04-15', capacity: 40, system: System.TOM }
     ];
     const feature: Feature = { 
       ...mockFeatures[0], 

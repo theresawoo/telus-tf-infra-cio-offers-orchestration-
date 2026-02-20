@@ -63,12 +63,12 @@ const SprintDrawer: React.FC<SprintDrawerProps> = ({
 
   // Use localFeatures for calculations to show "potential" utilization immediately
   const sprintFeatures = useMemo(() => {
-    return localFeatures.filter(f => f.sprintAllocations.some(sa => sa.sprintId === sprint.id));
-  }, [localFeatures, sprint.id]);
+    return localFeatures.filter(f => f.system === sprint.system && f.sprintAllocations.some(sa => sa.sprintId === sprint.id));
+  }, [localFeatures, sprint.id, sprint.system]);
 
   const availableFeatures = useMemo(() => {
-    return localFeatures.filter(f => !f.sprintAllocations.some(sa => sa.sprintId === sprint.id));
-  }, [localFeatures, sprint.id]);
+    return localFeatures.filter(f => f.system === sprint.system && !f.sprintAllocations.some(sa => sa.sprintId === sprint.id));
+  }, [localFeatures, sprint.id, sprint.system]);
 
   const handleUpdateSprintDraft = (updates: Partial<Sprint>) => {
     setDraftSprint(prev => ({ ...prev, ...updates }));

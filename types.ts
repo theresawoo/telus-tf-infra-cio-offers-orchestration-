@@ -50,6 +50,7 @@ export interface Sprint {
   targetDeploymentDate: string;
   capacity: number;
   isClosed?: boolean;
+  system: System;
 }
 
 export interface RunRateData {

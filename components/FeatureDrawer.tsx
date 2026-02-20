@@ -64,6 +64,10 @@ const FeatureDrawer: React.FC<FeatureDrawerProps> = ({ feature, allFeatures, spr
     setEndStr(draft.endDate);
   };
 
+  const availableSprints = useMemo(() => {
+    return sprints.filter(s => s.system === draft.system);
+  }, [sprints, draft.system]);
+
   const handleSprintAssociation = (sprintId: string, action: 'add' | 'remove', points?: number) => {
     let nextAllocations = [...(draft.sprintAllocations || [])];
     if (action === 'add') {
@@ -76,7 +80,7 @@ const FeatureDrawer: React.FC<FeatureDrawerProps> = ({ feature, allFeatures, spr
       nextAllocations = nextAllocations.filter(sa => sa.sprintId !== sprintId);
     }
     
-    const updatedWithSprints = updateFeatureDatesFromSprints({ ...draft, sprintAllocations: nextAllocations }, sprints);
+    const updatedWithSprints = updateFeatureDatesFromSprints({ ...draft, sprintAllocations: nextAllocations }, availableSprints);
     setDraft(updatedWithSprints);
     setStartStr(updatedWithSprints.startDate);
     setEndStr(updatedWithSprints.endDate);
@@ -243,7 +247,7 @@ const FeatureDrawer: React.FC<FeatureDrawerProps> = ({ feature, allFeatures, spr
             <Label>Sprint Distribution</Label>
             <div className="space-y-3">
               {draft.sprintAllocations.map(sa => {
-                const sprint = sprints.find(s => s.id === sa.sprintId);
+                const sprint = availableSprints.find(s => s.id === sa.sprintId);
                 if (!sprint) return null;
                 const isSprintClosed = sprint.isClosed;
 
@@ -286,7 +290,7 @@ const FeatureDrawer: React.FC<FeatureDrawerProps> = ({ feature, allFeatures, spr
                   onChange={(e) => { if (e.target.value) handleSprintAssociation(e.target.value, 'add'); e.target.value = ""; }}
                 >
                   <option value="">Assign to sprint (active only)...</option>
-                  {sprints
+                  {availableSprints
                     .filter(s => !s.isClosed && !draft.sprintAllocations.some(sa => sa.sprintId === s.id))
                     .map(s => (
                       <option key={s.id} value={s.id}>{s.name}</option>
