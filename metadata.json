@@ -1,0 +1,5 @@
+{
+  "name": "Offers Orchestrator",
+  "description": "A comprehensive portal for managing product backlogs, aligning them with delivery timelines, and orchestrating financial payment schedules based on milestone completion.",
+  "requestFramePermissions": []
+}
